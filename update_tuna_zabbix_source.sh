@@ -1,0 +1,2 @@
+sudo sed -i 's@https://repo.zabbix.com@https://mirrors.tuna.tsinghua.edu.cn/zabbix@g' /etc/apt/sources.list.d/zabbix-agent2-plugins.list
+sudo sed -i 's@https://repo.zabbix.com@https://mirrors.tuna.tsinghua.edu.cn/zabbix@g' /etc/apt/sources.list.d/zabbix.list
