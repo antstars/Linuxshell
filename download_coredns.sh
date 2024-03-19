@@ -141,8 +141,7 @@ systemctl start coredns.service
 #开启coredns自启动
 systemctl enable coredns.service
 
-coredns="coredns"
-if ps -A | grep -q "$coredns"; then
+if ps -A | grep -q "coredns"; then
     echo "Coredns安装完成并设置自启"
 else
     echo "程序 $coredns 未在执行,脚本结束"
