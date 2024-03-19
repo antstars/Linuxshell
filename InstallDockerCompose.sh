@@ -98,5 +98,6 @@ function main() {
     CheckVersion
     DownloadInstall
 }
+
 main
 
