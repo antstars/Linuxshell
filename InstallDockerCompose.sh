@@ -15,6 +15,28 @@ function PermissionJudgment() {
         Output_Error "权限不足，请使用 Root 用户运行本脚本"
     fi
 }
+function CheckCommand() {
+    # 检查curl是否可用
+    if ! command -v curl &> /dev/null; then
+        echo "未安装 curl。"
+
+    # 使用apt检查并安装curl（适用于Debian、Ubuntu等基于apt的系统）
+        if command -v apt &> /dev/null; then
+            echo "使用 apt 安装 curl..."
+            apt update
+            apt install curl -y
+
+    # 使用yum检查并安装curl（适用于CentOS、RHEL等基于yum的系统）
+        elif command -v yum &> /dev/null; then
+            echo "使用 yum 安装 curl..."
+            yum check-update
+            yum install curl -y
+
+        else
+            Output_Error "未找到软件包管理器。请手动安装 curl。"
+        fi
+    fi
+}
 ## 判定系统处理器架构
 function CheckArch() {
     case $(uname -m) in
@@ -94,10 +116,10 @@ function DownloadInstall() {
 }
 function main() {
     PermissionJudgment
+    CheckCommand
     CheckArch
     CheckVersion
     DownloadInstall
 }
-
 main
 
