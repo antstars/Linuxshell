@@ -25,6 +25,7 @@ check_container_exit_status() {
       container_name=$(docker inspect --format '{{.Name}}' "$container_id" | sed 's,^/,,')
       docker restart "$container_id"
       echo "$(date '+%Y-%m-%d %H:%M:%S')重启容器: $container_name" >> "$LOG_FILE"
+      sleep 5 #避免docker同时重启产生的问题
     fi
   fi
 }
