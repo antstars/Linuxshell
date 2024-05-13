@@ -1,6 +1,13 @@
 #!/bin/bash
 ###计算exitd状态超过5min的container并restart
 ###写入定时任务每两分钟执行一次：*/2 * * * * {path}/container_restart.sh
+
+# 检查是否以管理员权限运行脚本
+if [ "$(id -u)" != "0" ]; then
+    echo "必须以 root 或 sudo 身份运行此脚本。"
+    exit 1
+fi
+
 LOG_FILE="/var/log/container_restart.log"
 
 # 获取当前时间戳
