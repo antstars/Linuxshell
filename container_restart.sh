@@ -10,6 +10,12 @@ fi
 
 LOG_FILE="/var/log/container_restart.log"
 
+# 检查日志文件写入权限
+if [ ! -w "$LOG_FILE" ]; then
+    echo "无法写入日志文件：$LOG_FILE"
+    exit 1
+fi
+
 # 获取当前时间戳
 current_time=$(date +%s)
 
