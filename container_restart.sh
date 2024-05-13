@@ -1,7 +1,7 @@
 #!/bin/bash
 ###计算exitd状态超过5min的container并restart
 ###写入定时任务每两分钟执行一次：*/2 * * * * {path}/container_restart.sh
-LOG_FILE="container_restart.log"
+LOG_FILE="/var/log/container_restart.log"
 
 # 获取当前时间戳
 current_time=$(date +%s)
