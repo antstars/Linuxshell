@@ -23,7 +23,7 @@ check_container_exit_status() {
     # 如果容器停止时间超过5分钟，则重启容器并记录日志
     if [ $duration -gt 300 ]; then
       container_name=$(docker inspect --format '{{.Name}}' "$container_id" | sed 's,^/,,')
-      docker restart $container_id
+      docker restart "$container_id"
       echo "$(date '+%Y-%m-%d %H:%M:%S')重启容器: $container_name" >> "$LOG_FILE"
     fi
   fi
