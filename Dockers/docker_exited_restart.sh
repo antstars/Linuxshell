@@ -15,6 +15,7 @@ for container_id in ${exited_container}; do
         docker restart ${container_id}
         container_name=$(docker inspect --format '{{.Name}}' "$container_id" | sed 's,^/,,')
         echo "$(date '+%Y-%m-%d %H:%M:%S') 容器：${container_name} 已重启" >> /var/log/docker_exited_restart.log
+        sleep 2 #避免docker同时重启产生的问题
     fi
 done
 
