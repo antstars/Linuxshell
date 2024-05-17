@@ -77,7 +77,7 @@ function update_docker() {
         ;;
         2)
         ## 计算总物理内存（M）
-        total_ram=$(free -m | awk '/^Mem:/{print $2}')
+        total_ram=$(free -m | awk 'NR==2{printf("%s\n", $2)}')
         read -p "请输入内存值，128-${total_ram}之间(M)：" mem
         if ! (($mem >= 128 && $mem <= $total_ram )); then
             echo "输入错误，返回上一级"
