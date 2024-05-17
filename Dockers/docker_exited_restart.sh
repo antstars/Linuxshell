@@ -13,7 +13,8 @@ exited_container=$(docker ps -a | grep Exited | awk '{print $1}')
 for container_id in ${exited_container}; do
     if [ -n "${exited_container}" ]; then
         docker restart ${container_id}
-        echo "$(date '+%Y-%m-%d %H:%M:%S') 容器：${container_id} 已重启" >> /var/log/docker_exited_restart.log
+        container_name=$(docker inspect --format '{{.Name}}' "$container_id" | sed 's,^/,,')
+        echo "$(date '+%Y-%m-%d %H:%M:%S') 容器：${container_name} 已重启" >> /var/log/docker_exited_restart.log
     fi
 done
 
