@@ -9,8 +9,8 @@ function Output_Error() {
 
 ## 权限判定
 function PermissionJudgment() {
-    if [ $UID -ne 0 ]; then
-        Output_Error "权限不足，请使用 Root 用户运行本脚本"
+    if [ "$EUID" -ne 0 ]; then
+    Output_Error "请以 root 身份运行此脚本。例如：sudo $0"
     fi
 }
 
@@ -19,23 +19,35 @@ function CheckPackageManager() {
     # 检查 apt 命令是否存在
     if type -p apt &> /dev/null; then
         PackageManage="apt"
+        PnstallerSuffix="deb"
+        InstallCommand="dpkg -i"
     elif type -p apt-get &> /dev/null; then
         PackageManage="apt-get"
+        PnstallerSuffix="deb"
+        InstallCommand="dpkg -i"
     # 检查 yum 命令是否存在
     elif type -p yum &> /dev/null; then
         PackageManage="yum"
+        PnstallerSuffix="rpm"
+        InstallCommand="yum install -y"
     # 检查 dnf 命令是否存在
     elif type -p dnf &> /dev/null; then
         PackageManage="dnf"
+        PnstallerSuffix="rpm"
+        InstallCommand="dnf install -y"
     # 检查 pacman 命令是否存在
     elif type -p pacman &> /dev/null; then
         PackageManage="pacman"
+        PnstallerSuffix="pkg.tar.xz"
     # 检查 zypper 命令是否存在
     elif type -p zypper &> /dev/null; then
         PackageManage="zypper"
+        PnstallerSuffix="rpm"
+        InstallCommand="rpm -Uvh"
     # 检查 apk 命令是否存在
     elif type -p apk &> /dev/null; then
         PackageManage="apk"
+        PnstallerSuffix="apk"
     else 
         Output_Error "不支持的包管理器类型！！！"
     fi
