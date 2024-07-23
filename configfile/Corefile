@@ -1,0 +1,87 @@
+.:1053 {
+    forward . 127.0.0.1:20051 127.0.0.1:20052 127.0.0.1:20053 127.0.0.1:20054 127.0.0.1:20055 127.0.0.1:20056 {
+      policy round_robin
+      max_concurrent 100000
+      health_check 5s
+    }
+    health :8100
+    reload 5s
+    prometheus :9153
+    cache {
+      success 50000
+      denial 25000
+    }
+    redisc {
+      endpoint 127.0.0.1:6379
+    }
+    errors
+    whoami
+    log
+}
+## 360dns
+.:20051 {
+  forward . tls://101.198.192.33 tls://112.65.69.15 {
+    tls_servername dot.360.cn
+    policy random
+    max_concurrent 100000
+    health_check 5s
+  }
+  cache
+  redisc {
+    endpoint 127.0.0.1:6379
+  }
+}
+## 默认udp
+.:20052 {
+  forward . 180.76.76.76 117.50.10.10 52.80.52.52 120.196.141.86 119.29.29.29 223.5.5.5 101.226.4.6 123.125.81.6 210.2.4.8 1.1.8.8 1.1.8.9 180.184.1.1 180.184.2.2
+  cache
+  redisc {
+    endpoint 127.0.0.1:6379
+  }
+}
+## 阿里dns
+.:20053 {
+  forward . tls://223.5.5.5 tls://223.6.6.6 {
+    tls_servername dns.alidns.com
+    policy random
+    max_concurrent 100000
+    health_check 5s
+  }
+  cache
+  redisc {
+    endpoint 127.0.0.1:6379
+  }
+}
+## onedns
+.:20054 {
+  forward . tls://106.75.165.71 {
+    tls_servername dot-pure.onedns.net
+    max_concurrent 100000
+    health_check 5s
+  }
+  cache
+  redisc {
+    endpoint 127.0.0.1:6379
+  }
+}
+## 腾讯
+.:20055 {
+  forward . tls://1.12.12.12 tls://120.53.53.53 {
+    tls_servername dot.pub
+    policy random
+    max_concurrent 100000
+    health_check 5s
+  }
+  cache
+  redisc {
+    endpoint 127.0.0.1:6379
+  }
+}
+## 火山引擎
+.:20056 {
+  forward . 180.184.1.1 180.184.2.2
+  cache
+  redisc {
+    endpoint 127.0.0.1:6379
+  }
+}
