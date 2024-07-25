@@ -1,5 +1,5 @@
 #!/bin/bash
-##检测和整理系统包管理器，处理器架构，系统类型
+##下载安装node_exporter
 
 ## 报错退出
 function Output_Error() {
@@ -94,6 +94,12 @@ function CheckArch() {
         ;;
     esac
 }
+
+function download_start() {
+    download_url=$(curl -s https://api.github.com/repos/prometheus/node_exporter/releases/latest | grep "browser_download_url.*linux-${SOURCE_ARCH}" | cut -d '"' -f 4)
+}
+
+
 
 function main() {
     PermissionJudgment
