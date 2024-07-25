@@ -1,6 +1,10 @@
 #!/bin/bash
 ##下载安装node_exporter
 
+## 变量定义
+node_dir=/etc/prometheus/exporter
+node_file=/etc/prometheus/exporter/node_exporter
+
 ## 报错退出
 function Output_Error() {
     [ "$1" ] && echo -e "\n$1\n"
@@ -95,6 +99,14 @@ function CheckArch() {
     esac
 }
 
+function node_exporter_dir_check(){
+    
+    if [ ! -d ${node_dir} ]; then
+        mkdir -p ${node_dir}
+    fi
+
+}
+
 function download_start() {
     download_url=$(curl -s https://api.github.com/repos/prometheus/node_exporter/releases/latest | grep "browser_download_url.*linux-${SOURCE_ARCH}" | cut -d '"' -f 4)
 }
@@ -106,6 +118,8 @@ function main() {
     CheckPackageManager
     CheckCommand
     CheckArch
+    node_exporter_dir_check
+    download_start
 }
 
 main
