@@ -1,8 +1,9 @@
+## 转发到国内
 .:1053 {
     forward . 127.0.0.1:20051 127.0.0.1:20052 127.0.0.1:20053 127.0.0.1:20054 127.0.0.1:20055 127.0.0.1:20056 {
       policy round_robin
       max_concurrent 100000
-      health_check 5s
+      health_check 0.5s
     }
     health :8100
     reload 5s
@@ -14,29 +15,56 @@
     redisc {
       endpoint 127.0.0.1:6379
     }
-    errors
-    whoami
-    log
+    errors {
+        consolidate 5m ".* i/o timeout$" warning
+        consolidate 30s "^Failed to .+"
+    }
+    log . {
+      class error
+    }
 }
+## 转发到海外
+.:1054 {
+    forward . 127.0.0.1:20051 127.0.0.1:30050 127.0.0.1:30051 127.0.0.1:30052 127.0.0.1:30053 127.0.0.1:30054 127.0.0.1:30055 127.0.0.1:30056 127.0.0.1:30057 {
+      policy round_robin
+      max_concurrent 100000
+      health_check 0.5s
+     }
+     cache
+     redisc {
+       endpoint 127.0.0.1:6379
+     }
+     errors {
+        consolidate 5m ".* i/o timeout$" warning
+        consolidate 30s "^Failed to .+"
+     }
+     log . {
+      class error
+     }
+
+}
+
+######国内DNS##### 
+
 ## 360dns
 .:20051 {
-  forward . tls://101.198.192.33 tls://112.65.69.15 {
+  forward . tls://112.65.69.15 {
     tls_servername dot.360.cn
-    policy random
     max_concurrent 100000
-    health_check 5s
+    health_check 0.5s
   }
   cache
   redisc {
     endpoint 127.0.0.1:6379
   }
 }
+
 ## 默认udp
 .:20052 {
   forward . 180.76.76.76 117.50.10.10 52.80.52.52 120.196.141.86 119.29.29.29 223.5.5.5 101.226.4.6 123.125.81.6 210.2.4.8 1.1.8.8 1.1.8.9 180.184.1.1 180.184.2.2 {
     policy round_robin
     max_concurrent 100000
-    health_check 5s
+    health_check 0.5s
   }
   cache
   redisc {
@@ -46,10 +74,10 @@
 ## 阿里dns
 .:20053 {
   forward . tls://223.5.5.5 tls://223.6.6.6 {
-    tls_servername dns.alidns.com
+    tls_servername 114465.alidns.com
     policy random
     max_concurrent 100000
-    health_check 5s
+    health_check 0.5s
   }
   cache
   redisc {
@@ -74,7 +102,7 @@
     tls_servername dot.pub
     policy random
     max_concurrent 100000
-    health_check 5s
+    health_check 0.5s
   }
   cache
   redisc {
@@ -83,9 +111,126 @@
 }
 ## 火山引擎
 .:20056 {
-  forward . 180.184.1.1 180.184.2.2
+  forward . 180.184.1.1 180.184.2.2 {
+    policy round_robin
+    max_concurrent 100000
+    health_check 0.5s
+  }
   cache
   redisc {
     endpoint 127.0.0.1:6379
   }
+}
+
+
+######海外DNS#####
+
+## 谷歌
+.:30050 {
+  forward . tls://8.8.8.8 tls://8.8.4.4 {
+    tls_servername dns.google
+    policy random
+    max_concurrent 100000
+    health_check 0.5s
+   }
+   cache
+   redisc {
+     endpoint 127.0.0.1:6379
+   }
+}
+
+## Cloudflare DNS
+.:30051 {
+  forward . tls://1.1.1.1 tls://1.0.0.1 {
+    tls_servername 1dot1dot1dot1.cloudflare-dns.com
+    policy random
+    max_concurrent 100000
+    health_check 0.5s
+   }
+   cache
+   redisc {
+     endpoint 127.0.0.1:6379
+   }
+}
+
+## DNS.SB
+.:30052 {
+  forward . tls://185.222.222.222 {
+    tls_servername dot.sb
+    max_concurrent 100000
+    health_check 0.5s
+   }
+   cache
+   redisc {
+     endpoint 127.0.0.1:6379
+   }
+}
+
+## Cloudflare DNS
+.:30053 {
+  forward . tls://45.90.28.92 tls://45.90.30.92  {
+    tls_servername aaf622.dns.nextdns.io
+    policy random
+    max_concurrent 100000
+    health_check 0.5s
+   }
+   cache
+   redisc {
+     endpoint 127.0.0.1:6379
+   }
+}
+
+##  私有AdGuard DNS
+.:30054 {
+  forward . tls://94.140.14.49  {
+    tls_servername 4baf9186.d.adguard-dns.com
+    max_concurrent 100000
+    health_check 0.5s
+   }
+   cache
+   redisc {
+     endpoint 127.0.0.1:6379
+   }
+}
+
+## Quad9 DNS
+.:30055 {
+  forward . tls://9.9.9.9 tls://149.112.112.112 {
+    tls_servername dns.quad9.net
+    policy round_robin
+    max_concurrent 100000
+    health_check 0.5s
+   }
+   cache
+   redisc {
+     endpoint 127.0.0.1:6379
+   }
+}
+
+## Cisco OpenDNS
+.:30056 {
+  forward . tls://208.67.222.222 tls://208.67.220.220 {
+    tls_servername dns.opendns.com
+    policy round_robin
+    max_concurrent 100000
+    health_check 0.5s
+   }
+   cache
+   redisc {
+     endpoint 127.0.0.1:6379
+   }
+}
+
+## 公共 AdGuard DNS
+.:30057 {
+  forward . tls://94.140.15.15 tls://94.140.15.14 {
+    tls_servername dns.adguard-dns.com
+    policy round_robin
+    max_concurrent 100000
+    health_check 0.5s
+   }
+   cache
+   redisc {
+     endpoint 127.0.0.1:6379
+   }
 }
