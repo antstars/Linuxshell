@@ -109,6 +109,14 @@ function node_exporter_dir_check(){
 
 function download_start() {
     download_url=$(curl -s https://api.github.com/repos/prometheus/node_exporter/releases/latest | grep "browser_download_url.*linux-${SOURCE_ARCH}" | cut -d '"' -f 4)
+    node_version=$(curl -s https://api.github.com/repos/prometheus/node_exporter/releases/latest | grep tag_name | cut -d '"' -f 4)
+    if [ ! -d ${node_dir} ]; then
+        mkdir -p ${node_dir}
+        echo "创建工作目录：${node_dir}"
+    fi
+
+    wget -O ${node_dir}${node_dir}.tar.gz ${download_url} 
+
 }
 
 
