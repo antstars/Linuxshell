@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ "$EUID" -ne 0 ]; then
+    echo "请以 root 身份运行此脚本。例如：sudo $0"
+    exit
+fi
+
 # 定义日志目录路径
 LOG_DIR="/var/log"
 LOG_FILE="/var/log/removelog.log"
