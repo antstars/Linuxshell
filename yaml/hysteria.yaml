@@ -1,0 +1,17 @@
+# VPN的hysteria协议docker实现
+services:
+  hysteria:
+    image: tobyxdd/hysteria
+    container_name: hysteria
+    restart: always
+    network_mode: "host"
+    volumes:
+      - acme:/acme
+      - ./hysteria.yaml:/etc/hysteria.yaml
+      - ./antstars.crt:/etc/antstars.crt
+      - ./antstars.key:/etc/antstars.key
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    command: ["server", "-c", "/etc/hysteria.yaml"]
+volumes:
+  acme:
