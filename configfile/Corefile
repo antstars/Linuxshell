@@ -74,7 +74,7 @@
 ## 阿里dns
 .:20053 {
   forward . tls://223.5.5.5 tls://223.6.6.6 {
-    tls_servername 114465.alidns.com
+    tls_servername dns.alidns.com
     policy random
     max_concurrent 100000
     health_check 0.5s
@@ -166,10 +166,10 @@
    }
 }
 
-## Cloudflare DNS
+## Nextdns DNS
 .:30053 {
   forward . tls://45.90.28.92 tls://45.90.30.92  {
-    tls_servername aaf622.dns.nextdns.io
+    tls_servername dns.nextdns.io
     policy random
     max_concurrent 100000
     health_check 0.5s
@@ -180,10 +180,10 @@
    }
 }
 
-##  私有AdGuard DNS
+##  AdGuard DNS
 .:30054 {
-  forward . tls://94.140.14.49  {
-    tls_servername 4baf9186.d.adguard-dns.com
+  forward . tls://94.140.14.14 tls://94.140.15.15  {
+    tls_servername dns.adguard-dns.com
     max_concurrent 100000
     health_check 0.5s
    }
